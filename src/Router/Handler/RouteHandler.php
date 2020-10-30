@@ -52,9 +52,18 @@ class RouteHandler
 
     private function getRoute(string $id): Route
     {
-        return Cache::tags('zeno')->rememberForever(
-            sprintf('route_%s', $id),
-            fn() => Route::with('actions.service')->findOrFail($id)
-        );
+        $cacheKey = sprintf('route_%s', $id);
+
+        if (config('app.enable_cache') && Cache::tags('zeno')->has($cacheKey)) {
+            return Cache::tags('zeno')->get($cacheKey);
+        }
+
+        $route = Route::with('actions.service')->findOrFail($id);
+
+        if (config('app.enable_cache')) {
+            Cache::tags('zeno')->put($cacheKey, $route);
+        }
+
+        return $route;
     }
 }

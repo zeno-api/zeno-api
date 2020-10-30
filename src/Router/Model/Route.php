@@ -27,11 +27,15 @@ class Route extends Model
         'methods',
         'available',
         'type',
+        'freeze',
+        'freeze_ttl',
     ];
 
     protected $casts = [
-        'available' => 'bool',
-        'methods'   => 'array',
+        'available'  => 'bool',
+        'freeze'     => 'bool',
+        'freeze_ttl' => 'int',
+        'methods'    => 'array',
     ];
 
     public function actions(): HasMany

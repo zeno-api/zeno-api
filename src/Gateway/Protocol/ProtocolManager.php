@@ -42,7 +42,7 @@ final class ProtocolManager
      * @param Actions $actions
      * @param Request $request
      *
-     * @return ProtocolResponses[]
+     * @return ProtocolResponses[]|Collection
      */
     public function handle(Actions $actions, Request $request): Collection
     {

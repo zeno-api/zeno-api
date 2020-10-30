@@ -18,8 +18,8 @@ final class RouteRegistry
 {
     public function boot(Application $app): void
     {
-        if (Cache::tags('zeno')->has('routes')) {
-            $this->loadRouteFromCaches($app);
+        if (config('app.enable_cache') && $routes = Cache::tags('zeno')->get('routes')) {
+            $this->loadRouteFromCaches($app, $routes);
 
             return;
         }
@@ -35,10 +35,12 @@ final class RouteRegistry
             }
         );
 
-        $this->cacheRoutes($app);
+        if (config('app.enable_cache')) {
+            $this->cacheRoutes($app);
+        }
     }
 
-    private function loadRouteFromCaches(Application $app): void
+    private function loadRouteFromCaches(Application $app, array $routes): void
     {
         $loadRoutes = Closure::bind(function (Router $router, array $routes) {
             $router->routes = array_merge($router->routes, $routes['routes']);
@@ -46,7 +48,7 @@ final class RouteRegistry
             $router->groupStack = array_merge($router->groupStack, $routes['group_stack']);
         }, null, $app->router);
 
-        $loadRoutes($app->router, Cache::tags('zeno')->get('routes', []));
+        $loadRoutes($app->router, $routes);
     }
 
     private function cacheRoutes(Application $app): void

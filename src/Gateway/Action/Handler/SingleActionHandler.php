@@ -7,6 +7,7 @@ namespace Zeno\Gateway\Action\Handler;
 use Illuminate\Http\Request;
 use Zeno\Gateway\Action\ActionResponse;
 use Zeno\Gateway\Action\Actions;
+use Zeno\Gateway\Action\Helper\Cacheable;
 use Zeno\Gateway\Protocol\ProtocolManager;
 use Zeno\Router\Model\Route;
 use Zeno\Router\Type\RouteType;
@@ -16,6 +17,8 @@ use Zeno\Router\Type\RouteType;
  */
 final class SingleActionHandler implements ActionHandler
 {
+    use Cacheable;
+
     private ProtocolManager $protocolManager;
 
     public function __construct(ProtocolManager $protocolManager)
@@ -25,14 +28,24 @@ final class SingleActionHandler implements ActionHandler
 
     public function handle(Route $route, Request $request): ActionResponse
     {
+        if ($this->hasCache($route, $request)) {
+            return $this->getCache($route, $request);
+        }
+
         $response = $this->protocolManager->handle(new Actions([$route->actions->first()]), $request);
         $response = $response->first();
         $statusCodes = $response->codes();
 
-        return new ActionResponse(
+        $output = new ActionResponse(
             $response->decodedResponses()->first(),
             reset($statusCodes)
         );
+
+        if ($this->shouldBeCache($route)) {
+            $this->putCache($route, $request, $output);
+        }
+
+        return $output;
     }
 
     public function name(): string

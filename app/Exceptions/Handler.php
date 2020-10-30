@@ -2,9 +2,7 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Arr;
@@ -127,7 +125,7 @@ class Handler extends ExceptionHandler
         );
     }
 
-    protected function getHttpStatusCode(Exception $e)
+    protected function getHttpStatusCode(Throwable $e)
     {
         if ($this->isHttpException($e)) {
             return $e->getStatusCode();

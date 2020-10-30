@@ -18,6 +18,8 @@ class CreateRoutesTable extends Migration
             $table->string('path');
             $table->string('methods');
             $table->string('type', 50);
+            $table->boolean('freeze')->default(false);
+            $table->integer('freeze_ttl')->nullable();
             $table->boolean('available');
             $table->boolean('published');
             $table->timestamps();

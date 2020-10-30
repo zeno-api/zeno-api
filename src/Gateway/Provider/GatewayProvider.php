@@ -22,16 +22,16 @@ class GatewayProvider extends ServiceProvider
         $this->app->singleton(ActionManager::class, function (Application $app) {
             return new ActionManager($app->tagged('zeno_action_handlers'));
         });
-
-        $this->app->singleton(ProtocolManager::class, function (Application $app) {
-            return new ProtocolManager($app->tagged('zeno_protocols'));
-        });
     }
 
     public function register(): void
     {
         $this->registerProtocols();
         $this->registerActionHandlers();
+
+        $this->app->singleton(ProtocolManager::class, function (Application $app) {
+            return new ProtocolManager($app->tagged('zeno_protocols'));
+        });
     }
 
     private function registerProtocols(): void
