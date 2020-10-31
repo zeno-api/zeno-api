@@ -41,20 +41,21 @@ final class ProtocolManager
     /**
      * @param Actions $actions
      * @param Request $request
+     * @param array   $paramsJar
      *
      * @return ProtocolResponses[]|Collection
      */
-    public function handle(Actions $actions, Request $request): Collection
+    public function handle(Actions $actions, Request $request, array $paramsJar): Collection
     {
         $responses = $actions
             ->groupBy(fn(Action $action) => $action->service->driver)
-            ->reduce(function (array $responses, Actions $batch) use ($request) {
+            ->reduce(function (array $responses, Actions $batch) use ($request, $paramsJar) {
                 if (!$this->has($driver = $batch->first()->service->driver)) {
                     throw new ActionNotSupportedException($driver);
                 }
 
                 return array_merge($responses, [
-                    $driver => $this->protocols[$driver]->handle($batch, $request),
+                    $driver => $this->protocols[$driver]->handle($batch, $request, $paramsJar),
                 ]);
             }, []);
 

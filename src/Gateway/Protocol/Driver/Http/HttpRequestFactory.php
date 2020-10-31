@@ -13,5 +13,5 @@ use Zeno\Router\Model\Action;
  */
 interface HttpRequestFactory
 {
-    public function createFromAction(Action $action, ParameterInterface $queryParams, ParameterInterface $params, ParameterInterface $files): RequestInterface;
+    public function createFromAction(Action $action, ParameterInterface $queryParams, ParameterInterface $params, ParameterInterface $files, array $paramsJar): RequestInterface;
 }

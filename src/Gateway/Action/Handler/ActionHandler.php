@@ -13,7 +13,7 @@ use Zeno\Router\Model\Route;
  */
 interface ActionHandler
 {
-    public function handle(Route $route, Request $request): ActionResponse;
+    public function handle(Route $route, Request $request, array $paramsJar): ActionResponse;
 
     public function name(): string;
 }

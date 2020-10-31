@@ -35,16 +35,17 @@ final class HttpProtocol implements Protocol
         return 'http';
     }
 
-    public function handle(Actions $actions, Request $request): ProtocolResponses
+    public function handle(Actions $actions, Request $request, array $paramsJar): ProtocolResponses
     {
-        $promises = $actions->reduce(function (array $promises, Action $action) use ($request) {
+        $promises = $actions->reduce(function (array $promises, Action $action) use ($request, $paramsJar) {
             return array_merge($promises, [
                 $action->response_key => $this->httpClient->send(
                     $this->requestFactory->createFromAction(
                         $action,
                         new ImmutableParameter($request->query->all()),
                         new ImmutableParameter($request->request->all()),
-                        new ImmutableParameter($request->files->all())
+                        new ImmutableParameter($request->files->all()),
+                        $paramsJar
                     )
                 ),
             ]);

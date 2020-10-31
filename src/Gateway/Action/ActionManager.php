@@ -42,6 +42,8 @@ final class ActionManager
             throw new CannotHandleRouteException($route);
         }
 
-        return $this->handlers[$route->type]->handle($route, $request);
+        $paramJars = array_merge($request->input(), $request->route()[2] ?? []);
+
+        return $this->handlers[$route->type]->handle($route, $request, $paramJars);
     }
 }

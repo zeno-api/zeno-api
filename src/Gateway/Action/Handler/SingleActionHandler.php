@@ -9,6 +9,7 @@ use Zeno\Gateway\Action\ActionResponse;
 use Zeno\Gateway\Action\Actions;
 use Zeno\Gateway\Action\Helper\Cacheable;
 use Zeno\Gateway\Protocol\ProtocolManager;
+use Zeno\Gateway\Protocol\ProtocolResponses;
 use Zeno\Router\Model\Route;
 use Zeno\Router\Type\RouteType;
 
@@ -26,14 +27,15 @@ final class SingleActionHandler implements ActionHandler
         $this->protocolManager = $protocolManager;
     }
 
-    public function handle(Route $route, Request $request): ActionResponse
+    public function handle(Route $route, Request $request, array $paramsJar): ActionResponse
     {
         if (null !== $data = $this->getCache($route, $request)) {
             return $data;
         }
 
-        $response = $this->protocolManager->handle(new Actions([$route->actions->first()]), $request);
-        $response = $response->first();
+        $responses = $this->protocolManager->handle(new Actions([$route->actions->first()]), $request, $paramsJar);
+        /** @var ProtocolResponses $response */
+        $response = $responses->first();
         $statusCodes = $response->codes();
 
         $output = new ActionResponse(
@@ -41,7 +43,7 @@ final class SingleActionHandler implements ActionHandler
             reset($statusCodes)
         );
 
-        if ($this->shouldBeCache($route)) {
+        if (!$response->hasFailedRequests() && $this->shouldBeCache($route)) {
             $this->putCache($route, $request, $output);
         }
 

@@ -9,5 +9,5 @@ return [
     'response_header_prefix' => 'Zeno-Gateway-',
     'response_header_via'    => 'Zeno',
     'enable_cache'           => env('ENABLE_ROUTE_CACHE', 'local' !== app()->environment()),
-    'total_static_routes'    => 1,
+    'enable_static_route'    => env('ENABLE_STATIC_ROUTE', false),
 ];

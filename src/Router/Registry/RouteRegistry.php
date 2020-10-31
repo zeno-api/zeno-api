@@ -16,11 +16,15 @@ use Zeno\Router\Model\Route;
  */
 final class RouteRegistry
 {
+    private static bool $booted = false;
+
     public function boot(Application $app): void
     {
-        if (count($app->router->getRoutes()) > (int) config('app.total_static_routes')) {
+        if (config('app.enable_static_route') && self::$booted) {
             return;
         }
+
+        self::$booted = true;
 
         if (config('app.enable_cache') && !empty($routes = Cache::tags(['zeno'])->get('routes'))) {
             $this->loadRouteFromCaches($app, $routes);

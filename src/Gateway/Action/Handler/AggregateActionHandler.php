@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Zeno\Gateway\Action\ActionResponse;
 use Zeno\Gateway\Action\Actions;
+use Zeno\Gateway\Action\Helper\Cacheable;
 use Zeno\Gateway\Protocol\ProtocolManager;
 use Zeno\Gateway\Protocol\ProtocolResponses;
 use Zeno\Router\Model\Action;
@@ -19,6 +20,8 @@ use Zeno\Router\Model\Route;
  */
 final class AggregateActionHandler implements ActionHandler
 {
+    use Cacheable;
+
     private ProtocolManager $protocolManager;
 
     public function __construct(ProtocolManager $protocolManager)
@@ -26,20 +29,35 @@ final class AggregateActionHandler implements ActionHandler
         $this->protocolManager = $protocolManager;
     }
 
-    public function handle(Route $route, Request $request): ActionResponse
+    public function handle(Route $route, Request $request, array $paramsJar): ActionResponse
     {
-        $responses = $this->getActions($route)->reduce(function (array $cary, Actions $batch) use ($request) {
-            $output = $this->protocolManager->handle($batch, $request);
+        if (null !== $data = $this->getCache($route, $request)) {
+            return $data;
+        }
 
-            return array_merge($cary, $output->reduce(function (array $batchCary, ProtocolResponses $protocolResponses) {
-                return array_merge($batchCary, $protocolResponses->decodedResponses()->all());
+        $failures = 0;
+        $responses = $this->getActions($route)->reduce(function (array $cary, Actions $batch) use ($request, &$paramsJar, &$failures) {
+            $output = $this->protocolManager->handle($batch, $request, $paramsJar);
+
+            return array_merge($cary, $output->reduce(function (array $batchCary, ProtocolResponses $protocolResponses) use (&$paramsJar, &$failures) {
+                $data = $protocolResponses->decodedResponses()->all();
+                $paramsJar = array_merge($paramsJar, $data);
+                $failures += $protocolResponses->totalFailures();
+
+                return array_merge($batchCary, $data);
             }, []));
         }, []);
 
-        return new ActionResponse(
+        $output = new ActionResponse(
             $responses,
             Response::HTTP_OK
         );
+
+        if (0 === $failures && $this->shouldBeCache($route)) {
+            $this->putCache($route, $request, $output);
+        }
+
+        return $output;
     }
 
     public function name(): string

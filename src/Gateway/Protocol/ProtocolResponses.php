@@ -44,6 +44,11 @@ class ProtocolResponses
         return $this->codes;
     }
 
+    public function totalFailures(): int
+    {
+        return $this->failures;
+    }
+
     public function hasFailedRequests(): bool
     {
         return $this->failures > 0;

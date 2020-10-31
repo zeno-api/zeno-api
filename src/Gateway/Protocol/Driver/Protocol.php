@@ -15,5 +15,5 @@ interface Protocol
 {
     public function name(): string;
 
-    public function handle(Actions $action, Request $request): ProtocolResponses;
+    public function handle(Actions $action, Request $request, array $paramsJar): ProtocolResponses;
 }

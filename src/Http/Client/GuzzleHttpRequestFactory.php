@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zeno\Http\Client;
 
+use Borobudur\Component\Parameter\ImmutableParameter;
 use Borobudur\Component\Parameter\ParameterInterface;
 use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Psr7\Request;
@@ -28,13 +29,13 @@ final class GuzzleHttpRequestFactory implements HttpRequestFactory
         $this->container = $container;
     }
 
-    public function createFromAction(Action $action, ParameterInterface $queryParams, ParameterInterface $params, ParameterInterface $files): RequestInterface
+    public function createFromAction(Action $action, ParameterInterface $queryParams, ParameterInterface $params, ParameterInterface $files, array $paramsJar): RequestInterface
     {
         $serviceOptions = $this->validate($action->options ?? []);
-        $requestOptions = $this->buildOptions($queryParams, $params, $files);
+        $requestOptions = $this->buildOptions($serviceOptions['method'], $queryParams, $params, $files, $paramsJar);
 
         return $this->applyOptions(
-            new Request($serviceOptions['method'], $this->buildUri($action)),
+            new Request($serviceOptions['method'], $this->buildUri($action, $paramsJar)),
             $requestOptions
         );
     }
@@ -53,18 +54,43 @@ final class GuzzleHttpRequestFactory implements HttpRequestFactory
         return $this->container->get(Factory::class);
     }
 
-    private function buildUri(Action $action): string
+    private function buildUri(Action $action, array $paramsJar): string
     {
-        return sprintf(
-            '%s/%s',
-            rtrim($action->service->options['base_uri'], '/'),
-            ltrim($action->destination, '/')
+        return $this->parseParams(
+            sprintf(
+                '%s/%s',
+                rtrim($action->service->options['base_uri'], '/'),
+                ltrim($action->destination, '/')
+            ),
+            $paramsJar
         );
     }
 
-    private function buildOptions(ParameterInterface $queryParams, ParameterInterface $params, ParameterInterface $files): array
+    private function parseParams(string $url, array $params, string $prefix = ''): string
+    {
+        foreach ($params as $key => $value) {
+            if (is_array($value)) {
+                $url = $this->parseParams($url, $value, $prefix . $key . '.');
+            }
+
+            if (is_scalar($value)) {
+                $url = str_replace('{' . $prefix . $key . '}', $value, $url);
+            }
+        }
+
+        return $url;
+    }
+
+    private function buildOptions(string $method, ParameterInterface $queryParams, ParameterInterface $params, ParameterInterface $files, array $paramsJar): array
     {
         $headers = ['Accept' => 'application/json'];
+
+        if (in_array(strtolower($method), ['get', 'delete'])) {
+            $queryParams = new ImmutableParameter(array_merge($queryParams->all(), $paramsJar));
+        } else {
+            $params = new ImmutableParameter(array_merge($params->all(), $paramsJar));
+        }
+
         $options = [RequestOptions::QUERY => $queryParams->all()];
 
         if ($files->isEmpty() && !$params->isEmpty()) {
