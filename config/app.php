@@ -8,5 +8,6 @@ return [
     'version'                => '1.0.0',
     'response_header_prefix' => 'Zeno-Gateway-',
     'response_header_via'    => 'Zeno',
-    'enable_cache'           => env('ENABLE_ROUTE_CACHE', 'local' !== app()->environment())
+    'enable_cache'           => env('ENABLE_ROUTE_CACHE', 'local' !== app()->environment()),
+    'total_static_routes'    => 1,
 ];

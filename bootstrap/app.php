@@ -114,4 +114,10 @@ $app->register(SwooleTW\Http\LumenServiceProvider::class);
 |
 */
 
+$app->router->group([
+    'namespace' => 'App',
+], function ($router) {
+    require __DIR__.'/../routes/api.php';
+});
+
 return $app;

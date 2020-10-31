@@ -18,10 +18,12 @@ final class RouteRegistry
 {
     public function boot(Application $app): void
     {
+        if (count($app->router->getRoutes()) > (int) config('app.total_static_routes')) {
+            return;
+        }
+
         if (config('app.enable_cache') && !empty($routes = Cache::tags(['zeno'])->get('routes'))) {
-            if (!$app->router->getRoutes()) {
-                $this->loadRouteFromCaches($app, $routes);
-            }
+            $this->loadRouteFromCaches($app, $routes);
 
             return;
         }
