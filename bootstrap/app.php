@@ -93,6 +93,7 @@ $app->configure('cors');
 |
 */
 
+$app->register(App\Provider\AppServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
 
