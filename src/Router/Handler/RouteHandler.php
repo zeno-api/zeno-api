@@ -54,8 +54,8 @@ class RouteHandler
     {
         $cacheKey = sprintf('route_%s', $id);
 
-        if (config('app.enable_cache') && Cache::tags(['zeno'])->has($cacheKey)) {
-            return Cache::tags(['zeno'])->get($cacheKey);
+        if (config('app.enable_cache') && null !== $route = Cache::tags(['zeno'])->get($cacheKey)) {
+            return $route;
         }
 
         $route = Route::with('actions.service')->findOrFail($id);
