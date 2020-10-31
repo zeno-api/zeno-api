@@ -80,15 +80,12 @@ return [
     */
     'pre_resolved' => [
         'files',
-        // 'session',
-        // 'session.store',
         'routes',
         'db',
         'db.factory',
         'cache',
         'cache.store',
         'config',
-        // 'cookie',
         'encrypter',
         'hash',
         'router',
@@ -112,7 +109,6 @@ return [
     |--------------------------------------------------------------------------
     */
     'providers'    => [
-        // Illuminate\Pagination\PaginationServiceProvider::class,
         Zeno\Router\Provider\RouteServiceProvider::class,
     ],
 
@@ -122,14 +118,8 @@ return [
     |--------------------------------------------------------------------------
     */
     'resetters'    => [
-        // SwooleTW\Http\Server\Resetters\ResetConfig::class,
-        // SwooleTW\Http\Server\Resetters\ResetSession::class,
-        // SwooleTW\Http\Server\Resetters\ResetCookie::class,
         SwooleTW\Http\Server\Resetters\ClearInstances::class,
         SwooleTW\Http\Server\Resetters\BindRequest::class,
-        SwooleTW\Http\Server\Resetters\RebindKernelContainer::class,
-        SwooleTW\Http\Server\Resetters\RebindRouterContainer::class,
-        // SwooleTW\Http\Server\Resetters\RebindViewContainer::class,
         SwooleTW\Http\Server\Resetters\ResetProviders::class,
     ],
 
