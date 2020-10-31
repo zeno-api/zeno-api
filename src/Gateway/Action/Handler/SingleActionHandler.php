@@ -28,8 +28,8 @@ final class SingleActionHandler implements ActionHandler
 
     public function handle(Route $route, Request $request): ActionResponse
     {
-        if ($this->hasCache($route, $request)) {
-            return $this->getCache($route, $request);
+        if (null !== $data = $this->getCache($route, $request)) {
+            return $data;
         }
 
         $response = $this->protocolManager->handle(new Actions([$route->actions->first()]), $request);

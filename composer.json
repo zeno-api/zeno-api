@@ -12,6 +12,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "illuminate/redis": "^8.12",
         "laravel/lumen-framework": "^8.0",
+        "swooletw/laravel-swoole": "^2.6",
         "thedevsaddam/lumen-route-list": "^2.0"
     },
     "require-dev": {

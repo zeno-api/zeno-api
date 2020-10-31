@@ -17,8 +17,13 @@ class RouteServiceProvider extends ServiceProvider
         $this->registry()->boot($this->app);
     }
 
+    public function register(): void
+    {
+        $this->app->singleton(RouteRegistry::class);
+    }
+
     private function registry(): RouteRegistry
     {
-        return $this->app->make(RouteRegistry::class);
+        return $this->app->get(RouteRegistry::class);
     }
 }

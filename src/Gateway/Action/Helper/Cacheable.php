@@ -16,17 +16,17 @@ trait Cacheable
 {
     protected function hasCache(Route $route, Request $request): bool
     {
-        return Cache::tags('zeno')->has($this->cacheKeyGenerator($route, $request));
+        return Cache::tags(['zeno'])->has($this->cacheKeyGenerator($route, $request));
     }
 
     protected function getCache(Route $route, Request $request)
     {
-        return Cache::tags('zeno')->get($this->cacheKeyGenerator($route, $request));
+        return Cache::tags(['zeno'])->get($this->cacheKeyGenerator($route, $request));
     }
 
     protected function putCache(Route $route, Request $request, ActionResponse $response): void
     {
-        Cache::tags('zeno')->put($this->cacheKeyGenerator($route, $request), $response, $route->freezeTtl);
+        Cache::tags(['zeno'])->put($this->cacheKeyGenerator($route, $request), $response, $route->freezeTtl);
     }
 
     protected function shouldBeCache(Route $route): bool

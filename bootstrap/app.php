@@ -95,11 +95,13 @@ $app->configure('cors');
 
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
-//
+
 $app->register(Zeno\Http\Provider\HttpServiceProvider::class);
-$app->register(Zeno\Router\Provider\RouteServiceProvider::class);
+// $app->register(Zeno\Router\Provider\RouteServiceProvider::class);
 $app->register(Zeno\Gateway\Provider\GatewayProvider::class);
 $app->register(Thedevsaddam\LumenRouteList\LumenRouteListServiceProvider::class);
+
+$app->register(SwooleTW\Http\LumenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
