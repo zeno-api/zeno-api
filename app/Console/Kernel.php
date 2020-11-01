@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Config\CacheConfigConsole;
+use App\Console\Commands\Swoole\SwooleHttpServerConsole;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +15,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        SwooleHttpServerConsole::class,
     ];
 
     /**

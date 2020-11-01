@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95e080fbb560aa9668b3b86897f7e466",
+    "content-hash": "eb80baff1f7923d25703bdd4f69c94a2",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4956,6 +4956,122 @@
     ],
     "packages-dev": [
         {
+            "name": "blackfire/php-sdk",
+            "version": "v1.23.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blackfireio/php-sdk.git",
+                "reference": "c11e9546182fcd8c2f3b1d5a4b867da062264355"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blackfireio/php-sdk/zipball/c11e9546182fcd8c2f3b1d5a4b867da062264355",
+                "reference": "c11e9546182fcd8c2f3b1d5a4b867da062264355",
+                "shasum": ""
+            },
+            "require": {
+                "composer/ca-bundle": "^1.0",
+                "php": ">=5.2.0"
+            },
+            "require-dev": {
+                "guzzlehttp/psr7": "^1.6",
+                "psr/http-message": "^1.0",
+                "symfony/http-client": "^4.3"
+            },
+            "suggest": {
+                "ext-blackfire": "The C version of the Blackfire probe",
+                "ext-zlib": "To push config to remote profiling targets"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/autostart.php"
+                ],
+                "psr-4": {
+                    "Blackfire\\": "src/Blackfire"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Blackfire.io",
+                    "email": "support@blackfire.io"
+                }
+            ],
+            "description": "Blackfire.io PHP SDK",
+            "keywords": [
+                "performance",
+                "profiler",
+                "uprofiler",
+                "xhprof"
+            ],
+            "time": "2020-05-29T11:19:11+00:00"
+        },
+        {
+            "name": "composer/ca-bundle",
+            "version": "1.2.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/ca-bundle.git",
+                "reference": "8a7ecad675253e4654ea05505233285377405215"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/8a7ecad675253e4654ea05505233285377405215",
+                "reference": "8a7ecad675253e4654ea05505233285377405215",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "ext-pcre": "*",
+                "php": "^5.3.2 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || 6.5 - 8",
+                "psr/log": "^1.0",
+                "symfony/process": "^2.5 || ^3.0 || ^4.0 || ^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\CaBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
+            "keywords": [
+                "cabundle",
+                "cacert",
+                "certificate",
+                "ssl",
+                "tls"
+            ],
+            "time": "2020-08-23T12:54:47+00:00"
+        },
+        {
             "name": "doctrine/instantiator",
             "version": "1.3.1",
             "source": {
@@ -6788,6 +6904,108 @@
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
             "time": "2020-07-12T23:59:07+00:00"
+        },
+        {
+            "name": "upscale/swoole-blackfire",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/upscalesoftware/swoole-blackfire.git",
+                "reference": "595aa1a2d3b02060bb7e8be6649a5a348795a818"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/upscalesoftware/swoole-blackfire/zipball/595aa1a2d3b02060bb7e8be6649a5a348795a818",
+                "reference": "595aa1a2d3b02060bb7e8be6649a5a348795a818",
+                "shasum": ""
+            },
+            "require": {
+                "blackfire/php-sdk": "^1.16",
+                "ext-swoole": "^4.0",
+                "php": ">=5.5",
+                "upscale/swoole-reflection": "^1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Upscale\\Swoole\\Blackfire\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Upscale Software Team",
+                    "email": "info@upscalesoftware.com"
+                }
+            ],
+            "description": "Blackfire profiler integration for Swoole web-server",
+            "homepage": "https://github.com/upscalesoftware/swoole-blackfire",
+            "keywords": [
+                "Blackfire.io",
+                "blackfire",
+                "companion",
+                "integration",
+                "profiler",
+                "profiling",
+                "swoole"
+            ],
+            "time": "2019-05-23T22:35:00+00:00"
+        },
+        {
+            "name": "upscale/swoole-reflection",
+            "version": "1.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/upscalesoftware/swoole-reflection.git",
+                "reference": "dbfbf33c29449f18ad1dd899392be1226bca874d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/upscalesoftware/swoole-reflection/zipball/dbfbf33c29449f18ad1dd899392be1226bca874d",
+                "reference": "dbfbf33c29449f18ad1dd899392be1226bca874d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-swoole": "^4.0",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "phpunit/phpunit": "^7.0",
+                "upscale/swoole-launchpad": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Upscale\\Swoole\\Reflection\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Upscale Software Team",
+                    "email": "info@upscalesoftware.com"
+                }
+            ],
+            "description": "Reflection API for Swoole web-server",
+            "homepage": "https://github.com/upscalesoftware/swoole-reflection",
+            "keywords": [
+                "body",
+                "event",
+                "headers",
+                "middleware",
+                "observer",
+                "reflection",
+                "subscription",
+                "swoole"
+            ],
+            "time": "2020-01-14T01:07:39+00:00"
         },
         {
             "name": "webmozart/assert",
