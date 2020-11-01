@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Zeno\Http\Client;
 
-use Borobudur\Component\Parameter\ImmutableParameter;
-use Borobudur\Component\Parameter\ParameterInterface;
 use GuzzleHttp\Exception\InvalidArgumentException;
+use GuzzleHttp\Psr7 as Psr7;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Utils;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Validation\Factory;
 use Psr\Http\Message\RequestInterface;
+use Zeno\Gateway\Action\RequestParams;
 use Zeno\Gateway\Protocol\Driver\Http\HttpRequestFactory;
 use Zeno\Router\Model\Action;
-use GuzzleHttp\Psr7 as Psr7;
 
 /**
  * @author  Iqbal Maulana <iq.bluejack@gmail.com>
@@ -29,10 +28,10 @@ final class GuzzleHttpRequestFactory implements HttpRequestFactory
         $this->container = $container;
     }
 
-    public function createFromAction(Action $action, ParameterInterface $queryParams, ParameterInterface $params, ParameterInterface $files, array $paramsJar): RequestInterface
+    public function createFromAction(Action $action, RequestParams $requestParams, array $paramsJar): RequestInterface
     {
         $serviceOptions = $this->validate($action->options ?? []);
-        $requestOptions = $this->buildOptions($serviceOptions['method'], $queryParams, $params, $files, $paramsJar);
+        $requestOptions = $this->buildOptions($serviceOptions['method'], $requestParams, $paramsJar);
 
         return $this->applyOptions(
             new Request($serviceOptions['method'], $this->buildUri($action, $paramsJar)),
@@ -81,23 +80,30 @@ final class GuzzleHttpRequestFactory implements HttpRequestFactory
         return $url;
     }
 
-    private function buildOptions(string $method, ParameterInterface $queryParams, ParameterInterface $params, ParameterInterface $files, array $paramsJar): array
+    private function buildOptions(string $method, RequestParams $requestParams, array $paramsJar): array
     {
-        $headers = ['Accept' => 'application/json'];
+        $headers = array_merge(['Accept' => 'application/json'], $requestParams->headers()->all());
+        $files = $requestParams->files();
+        $queryParams = [];
+        $params = [];
 
-        if (in_array(strtolower($method), ['get', 'delete'])) {
-            $queryParams = new ImmutableParameter(array_merge($queryParams->all(), $paramsJar));
-        } else {
-            $params = new ImmutableParameter(array_merge($params->all(), $paramsJar));
+        if (null !== $user = $requestParams->user()) {
+            $headers['X-User-Id'] = $user->getIdentifier();
         }
 
-        $options = [RequestOptions::QUERY => $queryParams->all()];
+        if (in_array(strtolower($method), ['get', 'delete'])) {
+            $queryParams = array_merge($requestParams->queryParams()->all(), $paramsJar);
+        } else {
+            $params = array_merge($requestParams->params()->all(), $paramsJar);
+        }
 
-        if ($files->isEmpty() && !$params->isEmpty()) {
-            $options[RequestOptions::JSON] = $params->all();
+        $options = [RequestOptions::QUERY => $queryParams];
+
+        if ($files->isEmpty() && count($params)) {
+            $options[RequestOptions::JSON] = $params;
         } else if (!$files->isEmpty()) {
             $options[RequestOptions::MULTIPART] = array_merge(
-                $params->all(),
+                $params,
                 $files->all()
             );
         }

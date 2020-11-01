@@ -24,10 +24,12 @@ class CreateActionsTable extends Migration
             $table->timestamps();
 
             $table->foreign('route_id')->references('id')->on('routes')->onDelete('cascade');
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
 
             $table->unique(['route_id', 'response_key']);
 
             $table->index('route_id');
+            $table->index('service_id');
         });
     }
 

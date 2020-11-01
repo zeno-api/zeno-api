@@ -11,5 +11,5 @@ use Psr\Http\Message\RequestInterface;
  */
 interface HttpClient
 {
-    public function send(RequestInterface $request);
+    public function send(RequestInterface $request, array $options = []);
 }

@@ -97,6 +97,7 @@ $app->register(App\Provider\AppServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
 
+$app->register(Zeno\Auth\Provider\AuthServiceProvider::class);
 $app->register(Zeno\Http\Provider\HttpServiceProvider::class);
 $app->register(Zeno\Gateway\Provider\GatewayProvider::class);
 $app->register(Thedevsaddam\LumenRouteList\LumenRouteListServiceProvider::class);

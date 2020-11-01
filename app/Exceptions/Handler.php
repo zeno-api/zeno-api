@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Arr;
@@ -83,6 +84,10 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof ModelNotFoundException) {
             return new NotFoundHttpException($exception->getMessage(), $exception);
+        }
+
+        if ($exception instanceof AuthenticationException) {
+            return new HttpException(401, $exception->getMessage());
         }
 
         if ($exception instanceof AuthorizationException) {

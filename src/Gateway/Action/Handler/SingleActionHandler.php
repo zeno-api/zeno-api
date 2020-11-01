@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Zeno\Gateway\Action\ActionResponse;
 use Zeno\Gateway\Action\Actions;
 use Zeno\Gateway\Action\Helper\Cacheable;
+use Zeno\Gateway\Action\RequestParams;
 use Zeno\Gateway\Protocol\ProtocolManager;
 use Zeno\Gateway\Protocol\ProtocolResponses;
 use Zeno\Router\Model\Route;
@@ -27,13 +28,19 @@ final class SingleActionHandler implements ActionHandler
         $this->protocolManager = $protocolManager;
     }
 
-    public function handle(Route $route, Request $request, array $paramsJar): ActionResponse
+    public function handle(Route $route, Request $request, RequestParams $requestParams, array $paramsJar): ActionResponse
     {
         if (null !== $data = $this->getCache($route, $request)) {
             return $data;
         }
 
-        $responses = $this->protocolManager->handle(new Actions([$route->actions->first()]), $request, $paramsJar);
+        $responses = $this->protocolManager->handle(
+            new Actions([$route->actions->first()]),
+            $request,
+            $requestParams,
+            $paramsJar
+        );
+
         /** @var ProtocolResponses $response */
         $response = $responses->first();
         $statusCodes = $response->codes();

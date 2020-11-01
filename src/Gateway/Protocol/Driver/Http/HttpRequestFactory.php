@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Zeno\Gateway\Protocol\Driver\Http;
 
-use Borobudur\Component\Parameter\ParameterInterface;
 use Psr\Http\Message\RequestInterface;
+use Zeno\Gateway\Action\RequestParams;
 use Zeno\Router\Model\Action;
 
 /**
@@ -13,5 +13,5 @@ use Zeno\Router\Model\Action;
  */
 interface HttpRequestFactory
 {
-    public function createFromAction(Action $action, ParameterInterface $queryParams, ParameterInterface $params, ParameterInterface $files, array $paramsJar): RequestInterface;
+    public function createFromAction(Action $action, RequestParams $requestParams, array $paramsJar): RequestInterface;
 }

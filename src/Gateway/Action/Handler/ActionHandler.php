@@ -6,6 +6,7 @@ namespace Zeno\Gateway\Action\Handler;
 
 use Illuminate\Http\Request;
 use Zeno\Gateway\Action\ActionResponse;
+use Zeno\Gateway\Action\RequestParams;
 use Zeno\Router\Model\Route;
 
 /**
@@ -13,7 +14,7 @@ use Zeno\Router\Model\Route;
  */
 interface ActionHandler
 {
-    public function handle(Route $route, Request $request, array $paramsJar): ActionResponse;
+    public function handle(Route $route, Request $request, RequestParams $requestParams, array $paramsJar): ActionResponse;
 
     public function name(): string;
 }

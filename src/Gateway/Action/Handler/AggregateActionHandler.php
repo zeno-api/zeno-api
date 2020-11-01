@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Zeno\Gateway\Action\ActionResponse;
 use Zeno\Gateway\Action\Actions;
 use Zeno\Gateway\Action\Helper\Cacheable;
+use Zeno\Gateway\Action\RequestParams;
 use Zeno\Gateway\Protocol\ProtocolManager;
 use Zeno\Gateway\Protocol\ProtocolResponses;
 use Zeno\Router\Model\Action;
@@ -29,15 +30,15 @@ final class AggregateActionHandler implements ActionHandler
         $this->protocolManager = $protocolManager;
     }
 
-    public function handle(Route $route, Request $request, array $paramsJar): ActionResponse
+    public function handle(Route $route, Request $request, RequestParams $requestParams, array $paramsJar): ActionResponse
     {
         if (null !== $data = $this->getCache($route, $request)) {
             return $data;
         }
 
         $failures = 0;
-        $responses = $this->getActions($route)->reduce(function (array $cary, Actions $batch) use ($request, &$paramsJar, &$failures) {
-            $output = $this->protocolManager->handle($batch, $request, $paramsJar);
+        $responses = $this->getActions($route)->reduce(function (array $cary, Actions $batch) use ($request, &$paramsJar, &$failures, $requestParams) {
+            $output = $this->protocolManager->handle($batch, $request, $requestParams, $paramsJar);
 
             return array_merge($cary, $output->reduce(function (array $batchCary, ProtocolResponses $protocolResponses) use (&$paramsJar, &$failures) {
                 $data = $protocolResponses->decodedResponses()->all();

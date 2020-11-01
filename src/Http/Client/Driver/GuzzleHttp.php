@@ -26,8 +26,8 @@ final class GuzzleHttp implements HttpClient
         ));
     }
 
-    public function send(RequestInterface $request)
+    public function send(RequestInterface $request, array $options = [])
     {
-        return $this->client->sendAsync($request);
+        return $this->client->sendAsync($request, $options);
     }
 }

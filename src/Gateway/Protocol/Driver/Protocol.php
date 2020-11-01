@@ -6,6 +6,7 @@ namespace Zeno\Gateway\Protocol\Driver;
 
 use Illuminate\Http\Request;
 use Zeno\Gateway\Action\Actions;
+use Zeno\Gateway\Action\RequestParams;
 use Zeno\Gateway\Protocol\ProtocolResponses;
 
 /**
@@ -15,5 +16,5 @@ interface Protocol
 {
     public function name(): string;
 
-    public function handle(Actions $action, Request $request, array $paramsJar): ProtocolResponses;
+    public function handle(Actions $action, Request $request, RequestParams $requestParams, array $paramsJar): ProtocolResponses;
 }

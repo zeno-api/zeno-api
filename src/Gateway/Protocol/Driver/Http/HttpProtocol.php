@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Zeno\Gateway\Action\Actions;
+use Zeno\Gateway\Action\RequestParams;
 use Zeno\Gateway\Protocol\ProtocolResponses;
 use Zeno\Gateway\Protocol\Driver\Protocol;
 use Zeno\Router\Model\Action;
@@ -35,18 +36,12 @@ final class HttpProtocol implements Protocol
         return 'http';
     }
 
-    public function handle(Actions $actions, Request $request, array $paramsJar): ProtocolResponses
+    public function handle(Actions $actions, Request $request, RequestParams $requestParams, array $paramsJar): ProtocolResponses
     {
-        $promises = $actions->reduce(function (array $promises, Action $action) use ($request, $paramsJar) {
+        $promises = $actions->reduce(function (array $promises, Action $action) use ($request, $paramsJar, $requestParams) {
             return array_merge($promises, [
                 $action->response_key => $this->httpClient->send(
-                    $this->requestFactory->createFromAction(
-                        $action,
-                        new ImmutableParameter($request->query->all()),
-                        new ImmutableParameter($request->request->all()),
-                        new ImmutableParameter($request->files->all()),
-                        $paramsJar
-                    )
+                    $this->requestFactory->createFromAction($action, $requestParams, $paramsJar)
                 ),
             ]);
         }, []);

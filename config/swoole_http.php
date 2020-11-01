@@ -109,6 +109,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'providers'    => [
+        Zeno\Auth\Provider\AuthServiceProvider::class,
         Zeno\Router\Provider\RouteServiceProvider::class,
     ],
 
