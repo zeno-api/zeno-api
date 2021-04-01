@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         SwooleHttpServerConsole::class,
+
+        CacheConfigConsole::class,
     ];
 
     /**

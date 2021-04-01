@@ -7,19 +7,18 @@ namespace Zeno\Http\Client;
 use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Psr7 as Psr7;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\RequestOptions;
-use GuzzleHttp\Utils;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Validation\Factory;
 use Psr\Http\Message\RequestInterface;
 use Zeno\Gateway\Action\RequestParams;
-use Zeno\Gateway\Protocol\Driver\Http\HttpRequestFactory;
+use Zeno\Gateway\Protocol\Driver\Http\HttpRequestFactory as HttpRequestFactoryContract;
 use Zeno\Router\Model\Action;
+use Zeno\Http\Request\RequestOptions;
 
 /**
  * @author  Iqbal Maulana <iq.bluejack@gmail.com>
  */
-final class GuzzleHttpRequestFactory implements HttpRequestFactory
+final class HttpRequestFactory implements HttpRequestFactoryContract
 {
     private Container $container;
 
@@ -145,7 +144,7 @@ final class GuzzleHttpRequestFactory implements HttpRequestFactory
         }
 
         if (isset($options['json'])) {
-            $options['body'] = Utils::jsonEncode($options['json']);
+            $options['body'] = json_decode($options['json']);
             unset($options['json']);
             // Ensure that we don't have the header in different case and set the new value.
             $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);

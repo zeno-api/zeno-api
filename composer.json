@@ -9,10 +9,14 @@
         "ext-json": "*",
         "borobudur/parameter": "dev-master",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/promises": "^1.4",
+        "guzzlehttp/psr7": "^1.8",
         "illuminate/redis": "^8.12",
         "laravel/lumen-framework": "^8.0",
+        "nyholm/psr7": "^1.4",
+        "php-http/httplug": "^2.2",
         "swooletw/laravel-swoole": "^2.6",
+        "symfony/http-client": "^5.2",
         "thedevsaddam/lumen-route-list": "^2.0"
     },
     "require-dev": {
