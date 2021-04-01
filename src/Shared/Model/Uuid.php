@@ -25,6 +25,11 @@ trait Uuid
         });
     }
 
+    public function getKeyType(): string
+    {
+        return 'string';
+    }
+
     public function getCasts(): array
     {
         return array_merge(
