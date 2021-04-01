@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Zeno\Auth\Security\Guard;
 
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
-use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Psr\Http\Message\ResponseInterface;
 use Zeno\Auth\Dto\User;
 use Zeno\Auth\Model\Auth;
 use Zeno\Gateway\Protocol\Driver\Http\HttpClient;
+use Zeno\Http\Request\RequestOptions;
 
 /**
  * @author  Iqbal Maulana <iq.bluejack@gmail.com>

@@ -13,4 +13,5 @@ final class RequestOptions
     const QUERY = 'query';
     const MULTIPART = 'multipart';
     const HEADERS = 'headers';
+    const HTTP_ERRORS = 'http_errors';
 }
