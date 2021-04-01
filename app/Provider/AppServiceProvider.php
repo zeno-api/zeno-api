@@ -21,14 +21,14 @@ use Laravel\Lumen\Application;
 class AppServiceProvider extends ServiceProvider
 {
     private array $commands = [
-        'Migrate',
-        'MigrateFresh',
-        'MigrateRefresh',
-        'MigrateReset',
-        'MigrateRollback',
-        'MigrateStatus',
-        'DbSeed',
-        'DbWipe',
+//        'Migrate',
+//        'MigrateFresh',
+//        'MigrateRefresh',
+//        'MigrateReset',
+//        'MigrateRollback',
+//        'MigrateStatus',
+//        'DbSeed',
+//        'DbWipe',
     ];
 
     public function boot(): void
@@ -38,14 +38,14 @@ class AppServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->app->singleton('MigrateFresh', fn() => new MigrateFreshConsole());
-        $this->app->singleton('MigrateRefresh', fn() => new MigrateRefreshConsole());
-        $this->app->singleton('MigrateReset', fn(Application $app) => new MigrateResetConsole($app['migrator']));
-        $this->app->singleton('MigrateRollback', fn(Application $app) => new MigrateRollbackConsole($app['migrator']));
-        $this->app->singleton('MigrateStatus', fn(Application $app) => new MigrateStatusConsole($app['migrator']));
-        $this->app->singleton('Migrate', fn(Application $app) => new MigrateConsole($app['migrator'], $app['events']));
-
-        $this->app->singleton('DbSeed', fn(Application $app) => new DatabaseSeedConsole($app['db']));
-        $this->app->singleton('DbWipe', fn(Application $app) => new DatabaseWipeConsole($app['db']));
+//        $this->app->singleton('MigrateFresh', fn() => new MigrateFreshConsole());
+//        $this->app->singleton('MigrateRefresh', fn() => new MigrateRefreshConsole());
+//        $this->app->singleton('MigrateReset', fn(Application $app) => new MigrateResetConsole($app['migrator']));
+//        $this->app->singleton('MigrateRollback', fn(Application $app) => new MigrateRollbackConsole($app['migrator']));
+//        $this->app->singleton('MigrateStatus', fn(Application $app) => new MigrateStatusConsole($app['migrator']));
+//        $this->app->singleton('Migrate', fn(Application $app) => new MigrateConsole($app['migrator'], $app['events']));
+//
+//        $this->app->singleton('DbSeed', fn(Application $app) => new DatabaseSeedConsole($app['db']));
+//        $this->app->singleton('DbWipe', fn(Application $app) => new DatabaseWipeConsole($app['db']));
     }
 }
