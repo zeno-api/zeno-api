@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Psr7 as Psr7;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Factory;
 use Psr\Http\Message\RequestInterface;
 use Zeno\Gateway\Action\RequestParams;
@@ -88,6 +89,7 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
 
         if (null !== $user = $requestParams->user()) {
             $headers['X-User-Id'] = $user->getIdentifier();
+            $headers['X-User'] = json_encode($user->toArray());
         }
 
         if (in_array(strtolower($method), ['get', 'delete'])) {
