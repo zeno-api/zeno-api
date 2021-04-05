@@ -146,7 +146,7 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
         }
 
         if (isset($options['json'])) {
-            $options['body'] = json_decode($options['json']);
+            $options['body'] = json_encode($options['json']);
             unset($options['json']);
             // Ensure that we don't have the header in different case and set the new value.
             $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
