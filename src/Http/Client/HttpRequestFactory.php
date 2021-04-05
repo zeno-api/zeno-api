@@ -136,7 +136,7 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
             $options['body'] = \http_build_query($options['form_params'], '', '&');
             unset($options['form_params']);
             // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
+            $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional'] ?? []);
             $options['_conditional']['Content-Type'] = 'application/x-www-form-urlencoded';
         }
 
@@ -149,7 +149,7 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
             $options['body'] = json_encode($options['json']);
             unset($options['json']);
             // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
+            $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional'] ?? []);
             $options['_conditional']['Content-Type'] = 'application/json';
         }
 
@@ -157,7 +157,7 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
             && $options['decode_content'] !== true
         ) {
             // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = Psr7\Utils::caselessRemove(['Accept-Encoding'], $options['_conditional']);
+            $options['_conditional'] = Psr7\Utils::caselessRemove(['Accept-Encoding'], $options['_conditional'] ?? []);
             $modify['set_headers']['Accept-Encoding'] = $options['decode_content'];
         }
 
@@ -215,7 +215,7 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
         if ($request->getBody() instanceof Psr7\MultipartStream) {
             // Use a multipart/form-data POST if a Content-Type is not set.
             // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
+            $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional'] ?? []);
             $options['_conditional']['Content-Type'] = 'multipart/form-data; boundary='
                 . $request->getBody()->getBoundary();
         }
