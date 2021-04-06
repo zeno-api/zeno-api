@@ -19,16 +19,14 @@ final class Presenter
      */
     private array $formatters = [];
     private Formatter $callbackFormatter;
-    private Cors $cors;
 
-    public function __construct($formatters, Formatter $callbackFormatter, Cors $cors)
+    public function __construct($formatters, Formatter $callbackFormatter)
     {
         foreach ($formatters as $formatter) {
             $this->addFormatter($formatter);
         }
 
         $this->callbackFormatter = $callbackFormatter;
-        $this->cors = $cors;
     }
 
     public function addFormatter(Formatter $formatter): void
@@ -49,12 +47,10 @@ final class Presenter
 
     public function render(Request $request, int $statusCode, array $data): Response
     {
-        $response = $this->format($request, $statusCode, $data)->withHeaders([
+        return $this->format($request, $statusCode, $data)->withHeaders([
             'Via'                          => config('app.response_header_via'),
             $this->getHeaderKey('Version') => config('app.version'),
         ]);
-
-        return $this->cors->handle($request, $response);
     }
 
     private function getHeaderKey(string $key): string

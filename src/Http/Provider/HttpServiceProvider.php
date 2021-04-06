@@ -35,8 +35,7 @@ class HttpServiceProvider extends ServiceProvider
         $this->app->singleton(Presenter::class, function (Application $app) {
             return new Presenter(
                 $app->tagged('zeno_presenter_formatters'),
-                $app->get(JsonFormatter::class),
-                $app->get(Cors::class)
+                $app->get(JsonFormatter::class)
             );
         });
     }
