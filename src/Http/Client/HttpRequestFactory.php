@@ -8,13 +8,13 @@ use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Psr7 as Psr7;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Factory;
 use Psr\Http\Message\RequestInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Zeno\Gateway\Action\RequestParams;
 use Zeno\Gateway\Protocol\Driver\Http\HttpRequestFactory as HttpRequestFactoryContract;
-use Zeno\Router\Model\Action;
 use Zeno\Http\Request\RequestOptions;
+use Zeno\Router\Model\Action;
 
 /**
  * @author  Iqbal Maulana <iq.bluejack@gmail.com>
@@ -69,11 +69,11 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
     {
         foreach ($params as $key => $value) {
             if (is_array($value)) {
-                $url = $this->parseParams($url, $value, $prefix . $key . '.');
+                $url = $this->parseParams($url, $value, $prefix.$key.'.');
             }
 
             if (is_scalar($value)) {
-                $url = str_replace('{' . $prefix . $key . '}', $value, $url);
+                $url = str_replace('{'.$prefix.$key.'}', $value, $url);
             }
         }
 
@@ -102,11 +102,10 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
 
         if ($files->isEmpty() && count($params)) {
             $options[RequestOptions::JSON] = $params;
-        } else if (!$files->isEmpty()) {
-            $options[RequestOptions::MULTIPART] = array_merge(
-                $params,
-                $files->all()
-            );
+        } else {
+            if (!$files->isEmpty()) {
+                $options[RequestOptions::MULTIPART] = $this->buildMultipart($params, $files->all());
+            }
         }
 
         $options[RequestOptions::HEADERS] = $headers;
@@ -128,10 +127,10 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
         if (isset($options['form_params'])) {
             if (isset($options['multipart'])) {
                 throw new InvalidArgumentException('You cannot use '
-                    . 'form_params and multipart at the same time. Use the '
-                    . 'form_params option if you want to send application/'
-                    . 'x-www-form-urlencoded requests, and the multipart '
-                    . 'option to send multipart/form-data requests.');
+                    .'form_params and multipart at the same time. Use the '
+                    .'form_params option if you want to send application/'
+                    .'x-www-form-urlencoded requests, and the multipart '
+                    .'option to send multipart/form-data requests.');
             }
             $options['body'] = \http_build_query($options['form_params'], '', '&');
             unset($options['form_params']);
@@ -177,7 +176,7 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
                     // Ensure that we don't have the header in different case and set the new value.
                     $modify['set_headers'] = Psr7\Utils::caselessRemove(['Authorization'], $modify['set_headers']);
                     $modify['set_headers']['Authorization'] = 'Basic '
-                        . \base64_encode("$value[0]:$value[1]");
+                        .\base64_encode("$value[0]:$value[1]");
                     break;
                 case 'digest':
                     // @todo: Do not rely on curl
@@ -217,7 +216,7 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
             // Ensure that we don't have the header in different case and set the new value.
             $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional'] ?? []);
             $options['_conditional']['Content-Type'] = 'multipart/form-data; boundary='
-                . $request->getBody()->getBoundary();
+                .$request->getBody()->getBoundary();
         }
 
         // Merge in conditional headers if they are not present.
@@ -240,9 +239,37 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
     private function invalidBody(): InvalidArgumentException
     {
         return new InvalidArgumentException('Passing in the "body" request '
-            . 'option as an array to send a request is not supported. '
-            . 'Please use the "form_params" request option to send a '
-            . 'application/x-www-form-urlencoded request, or the "multipart" '
-            . 'request option to send a multipart/form-data request.');
+            .'option as an array to send a request is not supported. '
+            .'Please use the "form_params" request option to send a '
+            .'application/x-www-form-urlencoded request, or the "multipart" '
+            .'request option to send a multipart/form-data request.');
+    }
+
+    /**
+     * @param array          $params
+     * @param UploadedFile[] $files
+     *
+     * @return array
+     */
+    private function buildMultipart(array $params, array $files): array
+    {
+        $multiparts = [];
+
+        foreach ($params as $key => $value) {
+            $multiparts[] = [
+                'name'     => $key,
+                'contents' => is_scalar($value) ? $value : json_encode($value),
+            ];
+        }
+
+        foreach ($files as $key => $file) {
+            $multiparts[] = [
+                'name'     => $key,
+                'filename' => $file->getClientOriginalName(),
+                'contents' => Psr7\Utils::tryFopen($file->getRealPath(), 'r'),
+            ];
+        }
+
+        return $multiparts;
     }
 }
