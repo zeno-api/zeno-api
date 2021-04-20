@@ -12,6 +12,7 @@ use Zeno\Http\Client\Driver\GuzzleHttp;
 use Zeno\Http\Client\Driver\SymfonyHttp;
 use Zeno\Http\Client\HttpRequestFactory;
 use Zeno\Http\Presenter\Format\JsonFormatter;
+use Zeno\Http\Presenter\Format\PlainFormatter;
 use Zeno\Http\Presenter\Presenter;
 use Zeno\Http\Service\Cors;
 
@@ -35,7 +36,7 @@ class HttpServiceProvider extends ServiceProvider
         $this->app->singleton(Presenter::class, function (Application $app) {
             return new Presenter(
                 $app->tagged('zeno_presenter_formatters'),
-                $app->get(JsonFormatter::class)
+                $app->get(PlainFormatter::class)
             );
         });
     }

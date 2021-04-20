@@ -34,10 +34,10 @@ final class Presenter
         $this->formatters[] = $formatter;
     }
 
-    public function format(Request $request, int $statusCode, array $data): Response
+    public function format(Request $request, int $statusCode, $data): Response
     {
         foreach ($this->formatters as $formatter) {
-            if (true === $formatter->supports($request)) {
+            if (true === $formatter->supports($request, $data)) {
                 return $formatter->format($data, $statusCode);
             }
         }
@@ -45,7 +45,7 @@ final class Presenter
         return $this->callbackFormatter->format($data, $statusCode);
     }
 
-    public function render(Request $request, int $statusCode, array $data): Response
+    public function render(Request $request, int $statusCode, $data): Response
     {
         return $this->format($request, $statusCode, $data)->withHeaders([
             'Via'                          => config('app.response_header_via'),

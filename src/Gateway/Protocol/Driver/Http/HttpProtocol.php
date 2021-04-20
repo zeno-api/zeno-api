@@ -57,7 +57,12 @@ final class HttpProtocol implements Protocol
                 /** @var ResponseInterface $httpResponse */
                 $httpResponse = $response['value'];
 
-                $actionResponse->addSuccessResponse($key, (string) $httpResponse->getBody(), $httpResponse->getStatusCode());
+                $actionResponse->addSuccessResponse(
+                    $key,
+                    (string) $httpResponse->getBody(),
+                    $httpResponse->getStatusCode(),
+                    $httpResponse->getHeader('Content-Type')
+                );
             });
 
         $responses
@@ -67,7 +72,12 @@ final class HttpProtocol implements Protocol
                 $httpException = $response['reason'];
                 $httpResponse = $httpException->getResponse();
 
-                $actionResponse->addFailureResponse($key, (string) $httpResponse->getBody(), $httpResponse->getStatusCode());
+                $actionResponse->addFailureResponse(
+                    $key,
+                    (string) $httpResponse->getBody(),
+                    $httpResponse->getStatusCode(),
+                    $httpResponse->getHeader('Content-Type')
+                );
             });
 
         return $actionResponse;

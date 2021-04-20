@@ -13,16 +13,17 @@ class ProtocolResponses
 {
     private array $responses = [];
     private array $codes = [];
+    private array $types = [];
     private int $failures = 0;
 
-    public function addSuccessResponse(?string $key, string $body, int $statusCode): void
+    public function addSuccessResponse(?string $key, string $body, int $statusCode, array $type): void
     {
-        $this->addResponse($key, $body, $statusCode);
+        $this->addResponse($key, $body, $statusCode, $type);
     }
 
-    public function addFailureResponse(?string $key, string $body, int $statusCode): void
+    public function addFailureResponse(?string $key, string $body, int $statusCode, array $type): void
     {
-        $this->addResponse($key, $body, $statusCode);
+        $this->addResponse($key, $body, $statusCode, $type);
         $this->failures++;
     }
 
@@ -33,10 +34,8 @@ class ProtocolResponses
 
     public function decodedResponses(): Collection
     {
-        return $this->responses()->map(fn($response, $key) => array_merge(
-            json_decode($response, true),
-            ['status_code' => $this->codes[$key] ?? 0]
-        ));
+        // TODO: Add response decoder
+        return $this->responses()->map(fn($response, $key) => $this->decodeResponseType($response, $key));
     }
 
     public function codes(): array
@@ -54,9 +53,31 @@ class ProtocolResponses
         return $this->failures > 0;
     }
 
-    private function addResponse(?string $key, string $body, int $statusCode): void
+    private function decodeResponseType($response, string $key): mixed
+    {
+        if ($this->matchResponseType($key, ['application/json', 'text/json'])) {
+            return array_merge(
+                json_decode($response, true),
+                ['status_code' => $this->codes[$key] ?? 0]
+            );
+        }
+
+        return $response;
+    }
+
+    private function matchResponseType(string $key, array $stack): bool
+    {
+        foreach ($this->types[$key] as $type) {
+            return in_array($type, $stack);
+        }
+
+        return false;
+    }
+
+    private function addResponse(?string $key, string $body, int $statusCode, array $type): void
     {
         $this->responses[$key] = $body;
         $this->codes[$key] = $statusCode;
+        $this->types[$key] = $type;
     }
 }

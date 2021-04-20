@@ -12,7 +12,7 @@ use Illuminate\Http\Response;
  */
 interface Formatter
 {
-    public function format(array $data, int $statusCode): Response;
+    public function format($data, int $statusCode): Response;
 
-    public function supports(Request $request): bool;
+    public function supports(Request $request, $data): bool;
 }

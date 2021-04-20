@@ -10,9 +10,9 @@ namespace Zeno\Gateway\Action;
 class ActionResponse
 {
     private int $statusCode;
-    private array $data = [];
+    private mixed $data;
 
-    public function __construct(array $data, int $statusCode)
+    public function __construct($data, int $statusCode)
     {
         $this->data = $data;
         $this->statusCode = $statusCode;
@@ -23,7 +23,7 @@ class ActionResponse
         return $this->statusCode;
     }
 
-    public function getData(): array
+    public function getData()
     {
         return $this->data;
     }

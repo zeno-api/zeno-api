@@ -10,19 +10,16 @@ use Illuminate\Http\Response;
 /**
  * @author  Iqbal Maulana <iq.bluejack@gmail.com>
  */
-final class JsonFormatter implements Formatter
+final class PlainFormatter implements Formatter
 {
     public function format($data, int $statusCode): Response
     {
-        return new Response(
-            json_encode($data),
-            $statusCode,
-            ['Content-Type' => 'application/json']
-        );
+        return new Response($data, $statusCode);
     }
 
     public function supports(Request $request, $data): bool
     {
-        return $request->acceptsJson() && is_array($data);
+        return true;
     }
+
 }
