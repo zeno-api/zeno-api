@@ -73,6 +73,10 @@ final class HttpRequestFactory implements HttpRequestFactoryContract
             }
 
             if (is_scalar($value)) {
+                if (is_bool($value)) {
+                    $value = true === $value ? 'true' : 'false';
+                }
+
                 $url = str_replace('{'.$prefix.$key.'}', $value, $url);
             }
         }
