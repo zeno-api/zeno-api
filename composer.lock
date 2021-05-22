@@ -5498,19 +5498,20 @@
         },
         {
             "name": "zeno/signature",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zeno-api/signature.git",
-                "reference": "aaa1c20780e644b9b8e430c30dab333dd90cb847"
+                "reference": "b0decb2f76c480ba76772ddf4fbf2d4b10761abc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zeno-api/signature/zipball/aaa1c20780e644b9b8e430c30dab333dd90cb847",
-                "reference": "aaa1c20780e644b9b8e430c30dab333dd90cb847",
+                "url": "https://api.github.com/repos/zeno-api/signature/zipball/b0decb2f76c480ba76772ddf4fbf2d4b10761abc",
+                "reference": "b0decb2f76c480ba76772ddf4fbf2d4b10761abc",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
                 "php": ">=7.4"
             },
             "type": "library",
@@ -5537,9 +5538,9 @@
             "description": "Zeno signature component",
             "support": {
                 "issues": "https://github.com/zeno-api/signature/issues",
-                "source": "https://github.com/zeno-api/signature/tree/v1.0.1"
+                "source": "https://github.com/zeno-api/signature/tree/v1.0.2"
             },
-            "time": "2021-05-22T07:28:11+00:00"
+            "time": "2021-05-22T14:06:18+00:00"
         }
     ],
     "packages-dev": [
