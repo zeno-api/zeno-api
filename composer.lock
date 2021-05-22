@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e240686bac0bc013842c6394bccb44e2",
+    "content-hash": "711e4bd07f42aeff2dddfa65f1d95a71",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5495,6 +5495,51 @@
                 "validate"
             ],
             "time": "2021-03-09T10:59:23+00:00"
+        },
+        {
+            "name": "zeno/signature",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zeno-api/signature.git",
+                "reference": "835f54ef72da8a09f6a5e1740afe4caa7df86030"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zeno-api/signature/zipball/835f54ef72da8a09f6a5e1740afe4caa7df86030",
+                "reference": "835f54ef72da8a09f6a5e1740afe4caa7df86030",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zeno\\Signature\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Iqbal Maulana",
+                    "email": "iq.bluejack@gmail.com"
+                }
+            ],
+            "description": "Zeno signature component",
+            "support": {
+                "issues": "https://github.com/zeno-api/signature/issues",
+                "source": "https://github.com/zeno-api/signature/tree/v1.0.0"
+            },
+            "time": "2021-05-22T04:29:19+00:00"
         }
     ],
     "packages-dev": [
@@ -7691,5 +7736,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

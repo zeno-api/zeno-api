@@ -20,13 +20,19 @@ class Action extends Model
 
     protected $fillable = [
         'response_key',
+        'route_id',
+        'service_id',
         'sequence',
         'destination',
         'options',
     ];
 
+    protected $attributes = [
+        'sequence' => 0,
+    ];
+
     protected $casts = [
-        'options' => 'array',
+        'options'  => 'array',
         'sequence' => 'int',
     ];
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zeno\Http\Client;
 
-use GuzzleHttp\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use GuzzleHttp\Psr7 as Psr7;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\Container\Container;

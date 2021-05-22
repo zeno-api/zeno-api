@@ -78,9 +78,9 @@ $app->configure('cors');
      Fruitcake\Cors\HandleCors::class,
  ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+ $app->routeMiddleware([
+     'auth' => App\Http\Middleware\Authenticate::class,
+ ]);
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +97,7 @@ $app->register(App\Provider\AppServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
 
+$app->register(App\Provider\AuthServiceProvider::class);
 $app->register(Zeno\Auth\Provider\AuthServiceProvider::class);
 $app->register(Zeno\Http\Provider\HttpServiceProvider::class);
 $app->register(Zeno\Gateway\Provider\GatewayProvider::class);
@@ -115,9 +116,7 @@ $app->register(SwooleTW\Http\LumenServiceProvider::class);
 |
 */
 
-$app->router->group([
-    'namespace' => 'App',
-], function ($router) {
+$app->router->group([], function ($router) {
     require __DIR__.'/../routes/api.php';
 });
 

@@ -17,7 +17,8 @@
         "php-http/httplug": "^2.2",
         "swooletw/laravel-swoole": "^2.6",
         "symfony/http-client": "^5.2",
-        "thedevsaddam/lumen-route-list": "^2.0"
+        "thedevsaddam/lumen-route-list": "^2.0",
+        "zeno/signature": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.9.1",

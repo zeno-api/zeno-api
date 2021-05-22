@@ -29,9 +29,11 @@ class Route extends Model
         'path',
         'methods',
         'available',
+        'published',
         'type',
         'freeze',
         'freeze_ttl',
+        'managed_by',
     ];
 
     protected $casts = [

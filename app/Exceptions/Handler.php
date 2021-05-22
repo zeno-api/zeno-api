@@ -9,6 +9,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -64,6 +65,10 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         $exception = $this->prepareException($exception);
+
+        if ($exception instanceof Response) {
+            return $exception;
+        }
 
         if ($exception instanceof ValidationException) {
             return $this->invalidJson($request, $exception);
